@@ -3,7 +3,6 @@ title: "The Elephant In The Room"
 description: "The reason why we win isn’t what they say it is. And by “they,” I mean literally everyone."
 dek: "Better products don’t win. Better competitors do."
 date: 2026-02-27
-readTime: "9 min read"
 order: 1
 thumbnail: "/assets/deep-reads/01-the-elephant-in-the-room-card.png"
 bottomLine: "Tech industry mythology leads us to believe that if we just build a better product, we win. But that’s not how the world, people, or markets work. Product capabilities are just one of four dimensions that lead companies to win or lose in the market. The other three are credibility, convenience, and cost. Taken together, they’re a unified theory of competitive advantage, and probably the single most important thing I can teach you about."

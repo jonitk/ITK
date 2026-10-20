@@ -3,7 +3,6 @@ title: "The Deep Reads Constitution"
 description: "This content is Positioning 201 and above. On a web page. For you to do whatever you want with."
 dek: "Welcome to the only website in the world dedicated to antivral content about positioning"
 date: 2026-02-02
-readTime: "9 min read"
 order: 2
 thumbnail: "/assets/deep-reads/02-the-deep-reads-constitution-card.png"
 bottomLine: "Deep Reads is the little corner of the internet where you’ll find everything I know about positioning in one place. No catches, no gimmicks, no funnels. No book to buy (yet). Just the best of what I’ve figured out, in a format that allows for depth and detail. Written by the actual author, rooted in real experience, and yours for free."

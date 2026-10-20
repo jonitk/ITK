@@ -12,7 +12,8 @@ const deepReads = defineCollection({
     /** The subheading under the title on the article page. */
     dek: z.string(),
     date: z.coerce.date(),
-    readTime: z.string(),
+    /** Optional, e.g. "12 min read". Calculated from the word count if left out. */
+    readTime: z.string().optional(),
     /** Position on the Deep Reads list (1 = first). */
     order: z.number(),
     /** Card image, stored in public/assets/deep-reads/. */

@@ -3,7 +3,6 @@ title: "The Unmovable Ground Truths About Positioning"
 description: "This is what positioning is, was, and will be. I'm totally okay with it."
 dek: "What do positioning and sex have in common? Every generation thinks they invented it."
 date: 2026-04-08
-readTime: "9 min read"
 order: 3
 thumbnail: "/assets/deep-reads/03-the-unmovable-ground-truths-about-positioning-card.png"
 bottomLine: "There’s a lot of competition out there to “fix” positioning. To deliver the new framework, process, or tool that blows open a whole new way of thinking about it. Positioning is straightforward. It’s the process of teaching the market what you are, who you're for, who you compete with, why you're different, and why you're great. You can't change it any more than you can change the molecular structure of water."

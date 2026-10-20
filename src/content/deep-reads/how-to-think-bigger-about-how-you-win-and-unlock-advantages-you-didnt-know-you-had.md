@@ -3,7 +3,6 @@ title: "How to Think Bigger About How You Win"
 description: "You wouldn't build a house with only one wall. But somehow, we’re OK competing on just one dimension: the capabilities of our products. This article breaks down three other \"C\" words—credibility, convenience, and cost that complete the picture of how you actually win."
 dek: "You wouldn't build a house with only one wall. But somehow, we’re OK competing on just one dimension: the capabilities of our products. This article breaks down three other \"C\" words—credibility, convenience, and cost that complete the picture of how you actually win."
 date: 2026-02-02
-readTime: "9 min read"
 order: 5
 thumbnail: "/assets/deep-reads/05-how-to-think-bigger-about-how-you-win-and-unlock-advantages-you-didnt-know-you-had-card.png"
 ---

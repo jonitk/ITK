@@ -41,3 +41,9 @@
   from = "/home-new"
   to = "/"
   status = 301
+
+# Deep Read moved to a cleaner address.
+[[redirects]]
+  from = "/deep-reads/www-inthekitchen-is-deep-reads-chili-piper"
+  to = "/deep-reads/chili-piper/"
+  status = 301

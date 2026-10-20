@@ -3,7 +3,6 @@ title: "How In The Kitchen Does Positioning"
 description: "The entire In The Kitchen positioning process, in one beefy mega-post."
 dek: "The entire In The Kitchen positioning process, in one beefy mega-post."
 date: 2026-02-02
-readTime: "9 min read"
 order: 4
 thumbnail: "/assets/deep-reads/04-how-in-the-kitchen-does-positioning-work-card.png"
 ---

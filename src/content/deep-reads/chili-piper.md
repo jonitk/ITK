@@ -3,7 +3,6 @@ title: "Chili Piper's Positioning, Exposed"
 description: "One day, I got mad at all those negative teardowns I kept seeing. The result was this deep dive into Chili Piper’s positioning, as explained to me by the CEO, Alina Vandenberghe. Not quite an ebook, and almost a comic book. Let’s call it an Exposition."
 dek: "One day, I got mad at all those negative teardowns I kept seeing. The result was this deep dive into Chili Piper’s positioning, as explained to me by the CEO, Alina Vandenberghe. Not quite an ebook, and almost a comic book. Let’s call it an Exposition."
 date: 2026-02-02
-readTime: "9 min read"
 order: 6
 thumbnail: "/assets/deep-reads/06-www-inthekitchen-is-deep-reads-chili-piper-card.png"
 ---
