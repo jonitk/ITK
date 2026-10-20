@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { faqs } from '../data/faqs';
-import { BOOKING_URL, EMAIL, ORGANIZATION_DESCRIPTION, absolute } from '../lib/site';
+import { BOOKING_URL, EMAIL, NEWSLETTER_URL, ORGANIZATION_DESCRIPTION, absolute } from '../lib/site';
 
 // A plain-text summary of the site for AI assistants (the llms.txt convention).
 // It is generated from the same content as the pages, so it never goes stale.
@@ -18,6 +18,7 @@ export const GET: APIRoute = async () => {
     `- Website: ${absolute('/')}`,
     `- Book a call: ${BOOKING_URL}`,
     `- Email: ${EMAIL}`,
+    `- Newsletter: ${NEWSLETTER_URL}`,
     '',
     '## Deep Reads',
     '',

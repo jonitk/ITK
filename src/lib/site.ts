@@ -6,6 +6,7 @@ export const SITE_NAME = 'In The Kitchen';
 export const BOOKING_URL = 'https://tidycal.com/itk/meet-with-jon';
 export const EMAIL = 'jon@inthekitchen.is';
 export const LINKEDIN_URL = 'https://www.linkedin.com/in/jonitkin/';
+export const NEWSLETTER_URL = 'https://reads.inthekitchen.is/';
 
 export const ORGANIZATION_DESCRIPTION =
   'In The Kitchen is a positioning consultancy designed to help B2B technology leaders land the decisions and ideas that create authentic category leadership.';
@@ -33,7 +34,7 @@ export const organization = {
     'Competitive differentiation',
     'Go-to-market strategy',
   ],
-  sameAs: [LINKEDIN_URL],
+  sameAs: [LINKEDIN_URL, NEWSLETTER_URL],
 };
 
 export const person = {
