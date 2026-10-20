@@ -851,6 +851,6 @@ Don’t forget that.
 
 Hey, congratulations. You made it to the end of this beast of an article.
 
-If you're a CEO, CMO, or VP Marketing at a growth-stage or at-scale B2B tech company wrestling with positioning, I'd love to hear from you. The companies I work best with have millions in revenue, complex sales cycles, ambitious growth targets, and are usually working through a significant product or GTM transition. <br>
+If you're a CEO, CMO, or VP Marketing at a growth-stage or at-scale B2B tech company wrestling with positioning, I'd love to hear from you. The companies I work best with have millions in revenue, complex sales cycles, ambitious growth targets, and are usually working through a significant product or GTM transition. <br>&zwj;
 
 Get on my [calendar](https://tidycal.com/itk/meet-with-jon) and we can talk.

@@ -75,7 +75,7 @@ But teaching an entire market what a product is, who it’s for, what makes it d
 
 I’m going to jump ahead to what I think is actually the book that gave us positioning as we know it in the B2B tech universe, Crossing the Chasm, by Geoffrey Moore. In the book, this is the *exact* way Moore breaks down this positioning statement formula.
 
-### 
+<h3 class="deep-read-spacer" aria-hidden="true">&zwj;</h3>
 
 - For (target customers—beachhead segment only)
 - Who are dissatisfied with (the current *market alternative*)
@@ -84,11 +84,11 @@ I’m going to jump ahead to what I think is actually the book that gave us posi
 - Unlike (the product alternative),
 - We have assembled (key whole product features for your specific application)
 
-### 
+<h3 class="deep-read-spacer" aria-hidden="true">&zwj;</h3>
 
 If I bring back up my five unassailable elements of positioning, they’re all covered.
 
-### 
+<h3 class="deep-read-spacer" aria-hidden="true">&zwj;</h3>
 
 - For (target customers—beachhead segment only)   → BUYER
 - Who are dissatisfied with (the current *market alternative*) → COMPETITION
@@ -97,43 +97,43 @@ If I bring back up my five unassailable elements of positioning, they’re all c
 - Unlike (the product alternative),
 - We have assembled (key whole product features for your specific application) → ADVANTAGES
 
-### 
+<h3 class="deep-read-spacer" aria-hidden="true">&zwj;</h3>
 
 I’ve read Crossing the Chasm many times. I still think it’s great. I think Geoffrey Moore’s positioning statement formula is sound. But here’s the funny thing about the provenance of ideas. I’m not so sure the positioning statement originated with Geoffrey Moore.
 
-### 
+<h3 class="deep-read-spacer" aria-hidden="true">&zwj;</h3>
 
 In the 1970s and 80s, Moore worked for a consulting firm named Regis McKenna, which was a sort of mini-McKinsey for the technology industry. You can [dig into it](https://diffusion-research.org/research_articles/chasm-theory-development/) yourself, and you’ll see that many of the ideas in Crossing the Chasm came from Geoffrey Moore’s time at Regis McKenna.
 
-### 
+<h3 class="deep-read-spacer" aria-hidden="true">&zwj;</h3>
 
 Maybe he came up with the approach all by himself while at Regis McKenna (and in fairness, Moore mentions the firm in the acknowledgements at the end of his book)...but that’s not really how things go.
 
-### 
+<h3 class="deep-read-spacer" aria-hidden="true">&zwj;</h3>
 
 I’m willing to bet the positioning statement formula was bouncing around Regis McKenna for a good while before Moore published it. I’m sure he shared it because he knew it worked.
 
-### 
+<h3 class="deep-read-spacer" aria-hidden="true">&zwj;</h3>
 
 Call me old-fashioned. I think it still does. (Even though I don’t use the run-on sentence format, which I find clunky.)
 
-### 
+<h3 class="deep-read-spacer" aria-hidden="true">&zwj;</h3>
 
 ### April Dunford didn’t reinvent positioning, either
 
-### 
+<h3 class="deep-read-spacer" aria-hidden="true">&zwj;</h3>
 
 Let’s jump ahead to the other major book about B2B positioning, April Dunford’s Obviously Awesome. I think it’s a great book, and it's a huge inspiration for In The Kitchen. I could write a long piece about what I appreciate about that book, and April is one of the giants upon whose shoulders I stand.
 
-### 
+<h3 class="deep-read-spacer" aria-hidden="true">&zwj;</h3>
 
 But I don’t think April Dunford changed Geoffrey Moore’s elements of positioning, which he probably picked up from his colleagues at Regis McKenna, who were probably influenced by Jack Trout.
 
-### 
+<h3 class="deep-read-spacer" aria-hidden="true">&zwj;</h3>
 
 Here’s a list of what April Dunford calls the “Five (Plus One) Components of Effective Positioning”.  (I’m skipping the “plus one,” “relevant trends”....I don’t think it really holds up, and she calls it optional.)
 
-### 
+<h3 class="deep-read-spacer" aria-hidden="true">&zwj;</h3>
 
 1. Competitive alternatives
 2. Unique attributes
@@ -141,11 +141,11 @@ Here’s a list of what April Dunford calls the “Five (Plus One) Components of
 4. Target market characteristics
 5. Market category
 
-### 
+<h3 class="deep-read-spacer" aria-hidden="true">&zwj;</h3>
 
 ….if I bring back up the Moore framework…. April Dunford’s are all accounted for.
 
-### 
+<h3 class="deep-read-spacer" aria-hidden="true">&zwj;</h3>
 
 - For (target customers—beachhead segment only)  → TARGET MARKET CHARACTERISTICS
 - Who are dissatisfied with (the current *market alternative*)  → COMPETITIVE ALTERNATIVES
@@ -154,19 +154,19 @@ Here’s a list of what April Dunford calls the “Five (Plus One) Components of
 - Unlike (the product alternative),
 - We have assembled (key whole product features for your specific application)  → UNIQUE ATTRIBUTES
 
-### 
+<h3 class="deep-read-spacer" aria-hidden="true">&zwj;</h3>
 
 Which is why my second-least favorite part of Obviously Awesome is the opening where April Dunford says positioning statements are dumb and tells people not to use them. (I’ll get to my least-favorite in an upcoming Deep Read.)
 
-### 
+<h3 class="deep-read-spacer" aria-hidden="true">&zwj;</h3>
 
 I think Dunford gave us a useful framework for working on positioning.
 
-### 
+<h3 class="deep-read-spacer" aria-hidden="true">&zwj;</h3>
 
 I don’t think she changed it, though.
 
-### 
+<h3 class="deep-read-spacer" aria-hidden="true">&zwj;</h3>
 
 <figure class="w-richtext-align-fullwidth w-richtext-figure-type-image" style="max-width:1706pxpx"><div><img alt="" loading="lazy" src="/assets/deep-reads/03-the-unmovable-ground-truths-about-positioning-03.png"/></div></figure>
 

@@ -5,6 +5,8 @@
  *   call-out box.
  * - Everything between call-outs is grouped into a rich-text block, which
  *   controls the spacing between paragraphs, headings and lists.
+ * - Lists keep role="list" so screen readers still announce them as lists
+ *   (the site's styles remove the bullets).
  */
 
 const element = (tagName, className, children, extra = {}) => ({
@@ -26,8 +28,17 @@ function calloutFrom(blockquote) {
   return element('div', ['quote-block'], [element('div', ['text-block-3'], inline)]);
 }
 
+function markLists(node) {
+  if (isElement(node, 'ul') || isElement(node, 'ol')) {
+    node.properties = { ...node.properties, role: 'list' };
+  }
+  node.children?.forEach(markLists);
+}
+
 export function rehypeDeepReadBlocks() {
   return (tree) => {
+    markLists(tree);
+
     const blocks = [];
     let current = null;
 
