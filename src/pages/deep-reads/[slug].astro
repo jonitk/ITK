@@ -24,6 +24,14 @@ const displayDate = data.date.toLocaleDateString('en-US', {
   timeZone: 'UTC',
 });
 
+// About 238 words a minute, the average adult silent reading speed.
+const words = (article.body ?? '')
+  .replace(/<[^>]+>/g, ' ')
+  .replace(/[#>*_`[\]()-]/g, ' ')
+  .split(/\s+/)
+  .filter(Boolean).length;
+const readTime = data.readTime ?? `${Math.max(1, Math.round(words / 238))} min read`;
+
 const url = absolute(`/deep-reads/${article.id}/`);
 const image = `/og/${article.id}.png`;
 const schema = [
@@ -41,6 +49,7 @@ const schema = [
     publisher: refs.organization,
     isPartOf: { '@id': absolute('/deep-reads/#blog') },
     inLanguage: 'en-US',
+    wordCount: words,
   },
   breadcrumbs([['Home', '/'], ['Deep Reads', '/deep-reads/'], [data.title, `/deep-reads/${article.id}/`]]),
 ];
@@ -70,7 +79,7 @@ const schema = [
             </div>
             <div class="deep-read-details">
               <span>{displayDate}</span>
-              <span>{data.readTime}</span>
+              <span>{readTime}</span>
             </div>
           </div>
         </div>

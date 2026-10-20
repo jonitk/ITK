@@ -4,7 +4,7 @@ import Nav from '../components/Nav.astro';
 import Faq from '../components/Faq.astro';
 import Footer from '../components/Footer.astro';
 import SiteScripts from '../components/SiteScripts.astro';
-import { breadcrumbs } from '../lib/site';
+import { BOOKING_URL, breadcrumbs } from '../lib/site';
 import '../styles/contact.css';
 
 const schema = [
@@ -29,7 +29,7 @@ const schema = [
           <div class="contact-folder" style="--contact-tab-mask: url('/assets/yellow-tab.svg')">
             <h1 id="contact-heading">Contact us</h1>
             <p>Send an email to jon@inthekitchen.is</p>
-            <a href="https://calendly.com/jonitkin/new-meeting" target="_blank" rel="noreferrer">
+            <a href={BOOKING_URL} target="_blank" rel="noreferrer">
               Book a call
             </a>
           </div>
