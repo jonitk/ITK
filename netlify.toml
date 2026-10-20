@@ -1,0 +1,45 @@
+# Netlify build and redirect settings for inthekitchen.is
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  SITE_URL = "https://www.inthekitchen.is"
+  BASE_PATH = "/"
+
+# Always serve the www version of the site.
+[[redirects]]
+  from = "https://inthekitchen.is/*"
+  to = "https://www.inthekitchen.is/:splat"
+  status = 301
+  force = true
+
+# Pages retired in the move off Webflow. Each one points visitors
+# (and search engines) to the closest page that still exists.
+[[redirects]]
+  from = "/positioning-consulting"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/creative-studio"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/pricing"
+  to = "/#faqs"
+  status = 301
+
+[[redirects]]
+  from = "/team"
+  to = "/"
+  status = 301
+
+# Old Webflow homepage variant.
+[[redirects]]
+  from = "/home-new"
+  to = "/"
+  status = 301

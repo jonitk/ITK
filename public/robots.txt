@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /articles/category-leadership/
+
+Sitemap: https://www.inthekitchen.is/sitemap-index.xml
