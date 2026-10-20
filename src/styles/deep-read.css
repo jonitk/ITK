@@ -143,6 +143,7 @@
 
 .deep-read-body h1 { font-size: clamp(2.75rem, 5vw, 5rem); }
 .deep-read-body h2 { font-size: clamp(2.4rem, 4vw, 4rem); }
+.deep-read-body h2.is-h1 { font-size: clamp(2.75rem, 5vw, 5rem); }
 .deep-read-body h3 { font-size: clamp(2rem, 3vw, 3rem); }
 .deep-read-body h4 { font-size: clamp(1.65rem, 2.3vw, 2.25rem); }
 

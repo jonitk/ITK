@@ -7,6 +7,8 @@
  *   controls the spacing between paragraphs, headings and lists.
  * - Lists keep role="list" so screen readers still announce them as lists
  *   (the site's styles remove the bullets).
+ * - A top-level heading ("# ") inside an article becomes a large <h2>: the
+ *   article title is the page's only <h1>, which is what search engines expect.
  */
 
 const element = (tagName, className, children, extra = {}) => ({
@@ -28,16 +30,20 @@ function calloutFrom(blockquote) {
   return element('div', ['quote-block'], [element('div', ['text-block-3'], inline)]);
 }
 
-function markLists(node) {
+function adjustElements(node) {
   if (isElement(node, 'ul') || isElement(node, 'ol')) {
     node.properties = { ...node.properties, role: 'list' };
   }
-  node.children?.forEach(markLists);
+  if (isElement(node, 'h1')) {
+    node.tagName = 'h2';
+    node.properties = { ...node.properties, className: ['is-h1'] };
+  }
+  node.children?.forEach(adjustElements);
 }
 
 export function rehypeDeepReadBlocks() {
   return (tree) => {
-    markLists(tree);
+    adjustElements(tree);
 
     const blocks = [];
     let current = null;

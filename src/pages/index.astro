@@ -15,13 +15,25 @@ import Testimonials from '../components/home/Testimonials.astro';
 import Founder from '../components/home/Founder.astro';
 import Closing from '../components/home/Closing.astro';
 import HomeScripts from '../components/home/HomeScripts.astro';
+import { faqs } from '../data/faqs';
 import '../styles/home.css';
+
+const faqSchema = {
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(({ question, answer }) => ({
+    '@type': 'Question',
+    name: question,
+    acceptedAnswer: { '@type': 'Answer', text: answer },
+  })),
+};
 ---
 
 <BaseLayout
   title="Own the positioning | In The Kitchen"
   description="Own the positioning that scales everything."
   bodyClass="body-new"
+  image="/og/home.png"
+  schema={[faqSchema]}
 >
   <script is:inline slot="head">
 

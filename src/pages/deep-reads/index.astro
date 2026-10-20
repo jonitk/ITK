@@ -6,15 +6,38 @@ import Faq from '../../components/Faq.astro';
 import Footer from '../../components/Footer.astro';
 import SiteScripts from '../../components/SiteScripts.astro';
 import '../../styles/site-chrome.css';
+import { absolute, breadcrumbs, refs } from '../../lib/site';
 import '../../styles/deep-reads-index.css';
 
 const articles = (await getCollection('deep-reads')).sort((a, b) => a.data.order - b.data.order);
+
+const schema = [
+  {
+    '@type': 'Blog',
+    '@id': absolute('/deep-reads/#blog'),
+    name: 'Deep Reads',
+    url: absolute('/deep-reads/'),
+    description:
+      'Detailed thinking from Jon Itkin on positioning, category leadership, and the decisions that make B2B technology companies win.',
+    author: refs.person,
+    publisher: refs.organization,
+    blogPost: articles.map((article) => ({
+      '@type': 'BlogPosting',
+      headline: article.data.title,
+      url: absolute(`/deep-reads/${article.id}/`),
+      datePublished: article.data.date.toISOString().slice(0, 10),
+    })),
+  },
+  breadcrumbs([['Home', '/'], ['Deep Reads', '/deep-reads/']]),
+];
 ---
 
 <BaseLayout
   title="Deep Reads | In The Kitchen"
   description="Deep Reads from In The Kitchen: detailed thinking about positioning, category leadership, and the decisions that make companies win."
   bodyClass="body-new deep-reads-index-page"
+  image="/og/deep-reads.png"
+  schema={schema}
 >
   <div class="page-wrapper">
     <Nav />
