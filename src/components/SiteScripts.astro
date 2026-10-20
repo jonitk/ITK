@@ -1,0 +1,91 @@
+---
+// Behaviour shared by every page: mobile menu, FAQ accordion, footer year,
+// and the navigation bar's scroll motion.
+---
+
+<script is:inline>
+  (() => {
+    const menuButton = document.querySelector('.menu-button-new');
+    const navigation = document.querySelector('.navigation-new');
+    const navbar = document.querySelector('.navbar-new');
+
+    if (menuButton && navigation && navbar) {
+      menuButton.setAttribute('role', 'button');
+      menuButton.setAttribute('tabindex', '0');
+      menuButton.setAttribute('aria-label', 'menu');
+      menuButton.setAttribute('aria-expanded', 'false');
+
+      const setMenu = (open) => {
+        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+        menuButton.classList.toggle('w--open', open);
+        navigation.classList.toggle('w--open', open);
+        navigation.style.transition = open ? 'all, transform 400ms' : '';
+        navigation.style.transform = open ? 'translateY(0px)' : '';
+        document.documentElement.style.overflow = open ? 'hidden' : '';
+        document.documentElement.style.boxSizing = open ? 'border-box' : '';
+        document.documentElement.style.paddingRight = open ? `${scrollbarWidth}px` : '';
+        menuButton.setAttribute('aria-expanded', String(open));
+      };
+
+      const toggleMenu = () => setMenu(menuButton.getAttribute('aria-expanded') !== 'true');
+      menuButton.addEventListener('click', toggleMenu);
+      menuButton.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          toggleMenu();
+        }
+      });
+      navigation.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => setMenu(false));
+      });
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 991) setMenu(false);
+      });
+    }
+
+    const faqItems = [...document.querySelectorAll('.faq-item')];
+    const setFaq = (item, open) => {
+      const header = item.querySelector('.faq-header-new');
+      const answer = item.querySelector('.faq-answer-wrapper');
+      const plus = item.querySelector('.plus-icon-faq');
+      if (!header || !answer || !plus) return;
+      item.classList.toggle('is-open', open);
+      header.setAttribute('aria-expanded', String(open));
+      answer.style.height = open ? `${answer.scrollHeight}px` : '0px';
+      plus.style.transform = open ? 'rotate(45deg)' : 'rotate(0deg)';
+    };
+
+    faqItems.forEach((item, index) => {
+      const header = item.querySelector('.faq-header-new');
+      const answer = item.querySelector('.faq-answer-wrapper');
+      if (!header || !answer) return;
+      header.setAttribute('role', 'button');
+      header.setAttribute('tabindex', '0');
+      header.setAttribute('aria-controls', `faq-answer-${index}`);
+      answer.id = `faq-answer-${index}`;
+      const toggle = () => setFaq(item, !item.classList.contains('is-open'));
+      header.addEventListener('click', toggle);
+      header.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          toggle();
+        }
+      });
+    });
+    if (faqItems[0]) setFaq(faqItems[0], true);
+    const syncOpenFaqs = () => faqItems.forEach((item) => {
+      if (item.classList.contains('is-open')) setFaq(item, true);
+    });
+    document.fonts?.ready.then(syncOpenFaqs);
+    window.addEventListener('resize', syncOpenFaqs);
+
+    document.querySelectorAll('.copyright-year').forEach((year) => {
+      year.textContent = String(new Date().getFullYear());
+    });
+  })();
+</script>
+
+<script>
+  import { initDirectionalNavigation } from '../scripts/directional-navigation.js';
+  initDirectionalNavigation();
+</script>

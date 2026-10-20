@@ -1,0 +1,581 @@
+---
+// Homepage-only behaviour: nav colour change past the hero, hero headline
+// entrance, "Listen" button, rotating testimonials, and hover motion on the
+// founder portrait and decision book.
+---
+
+<script is:inline>
+  (() => {
+    const navbar = document.querySelector('.navbar-new');
+
+    const heroSection = document.querySelector('.home-hero-section');
+
+    if (navbar && heroSection) {
+      let heroObserver;
+      let resizeFrame;
+
+      const observeHero = () => {
+        heroObserver?.disconnect();
+        const navHeight = Math.round(navbar.getBoundingClientRect().height);
+
+        heroObserver = new IntersectionObserver(
+          ([entry]) => {
+            navbar.classList.toggle('is-away-from-hero', !entry.isIntersecting);
+          },
+          {
+            rootMargin: `-${navHeight}px 0px 0px 0px`,
+            threshold: 0,
+          },
+        );
+
+        heroObserver.observe(heroSection);
+      };
+
+      observeHero();
+      window.addEventListener('resize', () => {
+        cancelAnimationFrame(resizeFrame);
+        resizeFrame = requestAnimationFrame(observeHero);
+      });
+    }
+
+    const listenButton = document.querySelector('.four-cs-listen');
+
+    if (listenButton && 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window) {
+      const listenLabel = listenButton.querySelector('.four-cs-listen-label');
+      const storyCard = listenButton.closest('.positioning-story-card');
+      let activeUtterance = null;
+
+      const resetListenButton = () => {
+        activeUtterance = null;
+        listenButton.setAttribute('aria-pressed', 'false');
+        if (listenLabel) listenLabel.textContent = 'Listen';
+      };
+
+      listenButton.addEventListener('click', () => {
+        if (activeUtterance) {
+          window.speechSynthesis.cancel();
+          resetListenButton();
+          return;
+        }
+
+        const storyText = storyCard
+          ? [...storyCard.querySelectorAll(
+              '.four-cs-headlines h2, .four-cs-copy p, .four-cs-item h3, .four-cs-item p, .positioning-quote-panel blockquote p, .positioning-quote-panel figcaption, .positioning-decisions-headlines h2, .positioning-decisions-copy p, .positioning-decisions-label, .positioning-decisions-list li',
+            )]
+              .map((element) => element.textContent?.trim())
+              .filter(Boolean)
+              .join('. ')
+          : '';
+
+        if (!storyText) return;
+
+        activeUtterance = new window.SpeechSynthesisUtterance(storyText);
+        activeUtterance.rate = 0.95;
+        activeUtterance.onend = resetListenButton;
+        activeUtterance.onerror = resetListenButton;
+        listenButton.setAttribute('aria-pressed', 'true');
+        if (listenLabel) listenLabel.textContent = 'Stop';
+        window.speechSynthesis.speak(activeUtterance);
+      });
+
+      window.addEventListener('pagehide', () => {
+        if (activeUtterance) window.speechSynthesis.cancel();
+      });
+    } else if (listenButton) {
+      listenButton.hidden = true;
+    }
+
+    const testimonialSection = document.querySelector('.b2b-ceos-section');
+
+    if (testimonialSection) {
+      const heading = testimonialSection.querySelector('h2');
+      const sourceCards = [...testimonialSection.querySelectorAll('.b2b-card-home')];
+      const visibleSlots = sourceCards.slice(0, 10);
+      const testimonials = sourceCards
+        .map((card) => {
+          const quote = card.querySelector('p');
+          const attribution = card.querySelector('h3');
+
+          return quote && attribution
+            ? {
+                quote: quote.textContent?.trim() ?? '',
+                attribution: attribution.textContent?.trim() ?? '',
+              }
+            : null;
+        })
+        .filter(Boolean);
+
+      if (heading) {
+        heading.id = 'testimonial-grid-heading';
+        heading.className = 'b2b-testimonial-heading';
+        heading.innerHTML =
+          '<span>B2B CEOs and CMOs</span><span>love In The Kitchen</span>';
+        testimonialSection.setAttribute('aria-labelledby', heading.id);
+        testimonialSection.setAttribute('tabindex', '0');
+      }
+
+      if (visibleSlots.length === 8 && testimonials.length > visibleSlots.length) {
+        sourceCards.slice(8).forEach((card) => {
+          card.hidden = true;
+        });
+
+        visibleSlots.forEach((card, index) => {
+          card.dataset.testimonialSlot = String(index);
+          card.setAttribute('aria-live', 'off');
+        });
+
+        let slotIndex = 0;
+        let nextTestimonialIndex = visibleSlots.length;
+        let rotationTimer = 0;
+        let transitionTimer = 0;
+        const rotationInterval = 2200;
+        let isVisible = false;
+        let isPointerPaused = false;
+        let isKeyboardPaused = false;
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+        const stopRotation = () => {
+          window.clearInterval(rotationTimer);
+          rotationTimer = 0;
+        };
+
+        const rotateTestimonial = () => {
+          const card = visibleSlots[slotIndex];
+          const quote = card?.querySelector('p');
+          const attribution = card?.querySelector('h3');
+          const testimonial = testimonials[nextTestimonialIndex];
+          if (!card || !quote || !attribution || !testimonial) return;
+
+          card.classList.add('is-changing');
+          window.clearTimeout(transitionTimer);
+          transitionTimer = window.setTimeout(() => {
+            quote.textContent = testimonial.quote;
+            attribution.textContent = testimonial.attribution;
+            requestAnimationFrame(() => card.classList.remove('is-changing'));
+          }, 220);
+
+          slotIndex = (slotIndex + 1) % visibleSlots.length;
+          nextTestimonialIndex = (nextTestimonialIndex + 1) % testimonials.length;
+        };
+
+        const startRotation = () => {
+          if (
+            rotationTimer ||
+            reducedMotion.matches ||
+            !isVisible ||
+            isPointerPaused ||
+            isKeyboardPaused ||
+            document.hidden
+          ) {
+            return;
+          }
+
+          rotationTimer = window.setInterval(rotateTestimonial, rotationInterval);
+        };
+
+        const syncRotation = () => {
+          stopRotation();
+          startRotation();
+        };
+
+        testimonialSection.addEventListener('pointerenter', () => {
+          isPointerPaused = true;
+          stopRotation();
+        });
+
+        testimonialSection.addEventListener('pointerleave', () => {
+          isPointerPaused = false;
+          startRotation();
+        });
+
+        testimonialSection.addEventListener('focusin', () => {
+          isKeyboardPaused = true;
+          stopRotation();
+        });
+
+        testimonialSection.addEventListener('focusout', () => {
+          isKeyboardPaused = false;
+          startRotation();
+        });
+
+        document.addEventListener('visibilitychange', syncRotation);
+        reducedMotion.addEventListener?.('change', syncRotation);
+
+        if ('IntersectionObserver' in window) {
+          const testimonialObserver = new IntersectionObserver(
+            ([entry]) => {
+              isVisible = entry.isIntersecting;
+              syncRotation();
+            },
+            { threshold: 0.12 },
+          );
+
+          testimonialObserver.observe(testimonialSection);
+        } else {
+          isVisible = true;
+          startRotation();
+        }
+      }
+    }
+  })();
+</script>
+<script is:inline>
+  (() => {
+    const root = document.documentElement;
+    const heroHeadline = document.querySelector('.home-hero-section .h1-home-hero');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const revealFinalState = () => {
+      root.classList.remove('hero-motion-pending');
+      heroHeadline?.classList.remove('is-animating');
+    };
+
+    if (!heroHeadline || reduceMotion) {
+      revealFinalState();
+      return;
+    }
+
+    heroHeadline.dataset.heroMotion = 'running';
+    heroHeadline.classList.add('is-animating');
+
+    requestAnimationFrame(() => {
+      const easing = 'cubic-bezier(0.16, 1, 0.3, 1)';
+      const animation = heroHeadline.animate(
+        [
+          { opacity: 0, transform: 'translate3d(0, 12px, 0)' },
+          { opacity: 1, transform: 'translate3d(0, 0, 0)' },
+        ],
+        { duration: 320, easing, fill: 'both' },
+      );
+      const animations = [animation];
+
+      root.classList.remove('hero-motion-pending');
+
+      Promise.allSettled(animations.map((animation) => animation.finished)).then(() => {
+        animations.forEach((animation) => animation.cancel());
+        heroHeadline.dataset.heroMotion = 'ready';
+        revealFinalState();
+      });
+
+      window.addEventListener(
+        'pagehide',
+        () => {
+          animations.forEach((animation) => animation.finish());
+          heroHeadline.dataset.heroMotion = 'ready';
+          revealFinalState();
+        },
+        { once: true },
+      );
+    });
+  })();
+</script>
+<script>
+  import { gsap } from 'gsap';
+
+  const founderPortrait = document.querySelector('.founder-profile-portrait');
+  const founderPortraitImage = founderPortrait?.querySelector('img');
+
+  if (founderPortrait && founderPortraitImage) {
+    const founderHoverMotion = gsap.matchMedia();
+
+    founderHoverMotion.add(
+      '(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)',
+      () => {
+        let portraitBounds;
+        const rotateXTo = gsap.quickTo(founderPortrait, 'rotationX', {
+          duration: 0.45,
+          ease: 'expo.out',
+        });
+        const rotateYTo = gsap.quickTo(founderPortrait, 'rotationY', {
+          duration: 0.45,
+          ease: 'expo.out',
+        });
+        const portraitScaleXTo = gsap.quickTo(founderPortrait, 'scaleX', {
+          duration: 0.36,
+          ease: 'expo.out',
+        });
+        const portraitScaleYTo = gsap.quickTo(founderPortrait, 'scaleY', {
+          duration: 0.36,
+          ease: 'expo.out',
+        });
+        const imageXTo = gsap.quickTo(founderPortraitImage, 'x', {
+          duration: 0.45,
+          ease: 'expo.out',
+        });
+        const imageYTo = gsap.quickTo(founderPortraitImage, 'y', {
+          duration: 0.45,
+          ease: 'expo.out',
+        });
+        const imageScaleXTo = gsap.quickTo(founderPortraitImage, 'scaleX', {
+          duration: 0.36,
+          ease: 'expo.out',
+        });
+        const imageScaleYTo = gsap.quickTo(founderPortraitImage, 'scaleY', {
+          duration: 0.36,
+          ease: 'expo.out',
+        });
+
+        gsap.set(founderPortrait, {
+          transformPerspective: 900,
+          transformOrigin: '50% 50%',
+          willChange: 'transform',
+        });
+        gsap.set(founderPortraitImage, {
+          transformOrigin: '50% 50%',
+          willChange: 'transform',
+        });
+
+        const resetPortrait = () => {
+          rotateXTo(0);
+          rotateYTo(0);
+          portraitScaleXTo(1);
+          portraitScaleYTo(1);
+          imageXTo(0);
+          imageYTo(0);
+          imageScaleXTo(1);
+          imageScaleYTo(1);
+        };
+
+        const handlePointerEnter = () => {
+          portraitBounds = founderPortrait.getBoundingClientRect();
+          portraitScaleXTo(1.008);
+          portraitScaleYTo(1.008);
+          imageScaleXTo(1.022);
+          imageScaleYTo(1.022);
+        };
+
+        const handlePointerMove = ({ clientX, clientY }) => {
+          if (!portraitBounds) {
+            portraitBounds = founderPortrait.getBoundingClientRect();
+          }
+
+          const normalizedX = Math.max(
+            -0.5,
+            Math.min(0.5, (clientX - portraitBounds.left) / portraitBounds.width - 0.5),
+          );
+          const normalizedY = Math.max(
+            -0.5,
+            Math.min(0.5, (clientY - portraitBounds.top) / portraitBounds.height - 0.5),
+          );
+
+          rotateXTo(normalizedY * -4);
+          rotateYTo(normalizedX * 4);
+          imageXTo(normalizedX * -5);
+          imageYTo(normalizedY * -4);
+        };
+
+        const handlePointerLeave = () => {
+          portraitBounds = undefined;
+          resetPortrait();
+        };
+
+        founderPortrait.addEventListener('pointerenter', handlePointerEnter);
+        founderPortrait.addEventListener('pointermove', handlePointerMove);
+        founderPortrait.addEventListener('pointerleave', handlePointerLeave);
+
+        return () => {
+          founderPortrait.removeEventListener('pointerenter', handlePointerEnter);
+          founderPortrait.removeEventListener('pointermove', handlePointerMove);
+          founderPortrait.removeEventListener('pointerleave', handlePointerLeave);
+          gsap.killTweensOf([founderPortrait, founderPortraitImage]);
+          gsap.set([founderPortrait, founderPortraitImage], {
+            clearProps: 'transform,transformOrigin,willChange',
+          });
+        };
+      },
+    );
+
+    window.addEventListener('pagehide', () => founderHoverMotion.revert(), { once: true });
+  }
+
+  const decisionBookVisual = document.querySelector('.decision-book-visual');
+  const decisionBookCard = decisionBookVisual?.querySelector('.decision-book-card');
+  const decisionBookGlare = decisionBookVisual?.querySelector('.decision-book-glare');
+  const decisionBookGlareSheen = decisionBookVisual?.querySelector(
+    '.decision-book-glare-sheen',
+  );
+  const decisionBookShadow = decisionBookVisual?.querySelector('.decision-book-shadow');
+
+  if (
+    decisionBookVisual &&
+    decisionBookCard &&
+    decisionBookGlare &&
+    decisionBookGlareSheen &&
+    decisionBookShadow
+  ) {
+    const decisionBookHoverMotion = gsap.matchMedia();
+
+    decisionBookHoverMotion.add(
+      '(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)',
+      () => {
+        let bookBounds;
+        const cardRotationXTo = gsap.quickTo(decisionBookCard, 'rotationX', {
+          duration: 0.48,
+          ease: 'expo.out',
+        });
+        const cardRotationYTo = gsap.quickTo(decisionBookCard, 'rotationY', {
+          duration: 0.48,
+          ease: 'expo.out',
+        });
+        const cardXTo = gsap.quickTo(decisionBookCard, 'x', {
+          duration: 0.48,
+          ease: 'expo.out',
+        });
+        const cardYTo = gsap.quickTo(decisionBookCard, 'y', {
+          duration: 0.48,
+          ease: 'expo.out',
+        });
+        const cardScaleXTo = gsap.quickTo(decisionBookCard, 'scaleX', {
+          duration: 0.4,
+          ease: 'expo.out',
+        });
+        const cardScaleYTo = gsap.quickTo(decisionBookCard, 'scaleY', {
+          duration: 0.4,
+          ease: 'expo.out',
+        });
+        const glareOpacityTo = gsap.quickTo(decisionBookGlare, 'opacity', {
+          duration: 0.24,
+          ease: 'power2.out',
+        });
+        const glareXTo = gsap.quickTo(decisionBookGlareSheen, 'x', {
+          duration: 0.42,
+          ease: 'expo.out',
+        });
+        const glareYTo = gsap.quickTo(decisionBookGlareSheen, 'y', {
+          duration: 0.42,
+          ease: 'expo.out',
+        });
+        const shadowXTo = gsap.quickTo(decisionBookShadow, 'x', {
+          duration: 0.52,
+          ease: 'expo.out',
+        });
+        const shadowYTo = gsap.quickTo(decisionBookShadow, 'y', {
+          duration: 0.52,
+          ease: 'expo.out',
+        });
+        const shadowRotationTo = gsap.quickTo(decisionBookShadow, 'rotation', {
+          duration: 0.52,
+          ease: 'expo.out',
+        });
+        const shadowScaleXTo = gsap.quickTo(decisionBookShadow, 'scaleX', {
+          duration: 0.45,
+          ease: 'expo.out',
+        });
+        const shadowScaleYTo = gsap.quickTo(decisionBookShadow, 'scaleY', {
+          duration: 0.45,
+          ease: 'expo.out',
+        });
+        const shadowOpacityTo = gsap.quickTo(decisionBookShadow, 'opacity', {
+          duration: 0.32,
+          ease: 'power2.out',
+        });
+
+        gsap.set(decisionBookCard, {
+          transformOrigin: '50% 72%',
+          transformPerspective: 1000,
+          force3D: true,
+          willChange: 'transform',
+        });
+        gsap.set(decisionBookGlareSheen, {
+          rotation: 12,
+          transformOrigin: '50% 50%',
+          force3D: true,
+          willChange: 'transform',
+        });
+        gsap.set(decisionBookShadow, {
+          transformOrigin: '50% 50%',
+          force3D: true,
+          willChange: 'transform,opacity',
+        });
+
+        const resetBook = () => {
+          cardRotationXTo(0);
+          cardRotationYTo(0);
+          cardXTo(0);
+          cardYTo(0);
+          cardScaleXTo(1);
+          cardScaleYTo(1);
+          glareOpacityTo(0);
+          glareXTo(0);
+          glareYTo(0);
+          shadowXTo(0);
+          shadowYTo(0);
+          shadowRotationTo(0);
+          shadowScaleXTo(1);
+          shadowScaleYTo(1);
+          shadowOpacityTo(1);
+        };
+
+        const handleBookPointerEnter = () => {
+          bookBounds = decisionBookVisual.getBoundingClientRect();
+          cardYTo(-6);
+          cardScaleXTo(1.025);
+          cardScaleYTo(1.025);
+          glareOpacityTo(0.72);
+          shadowScaleXTo(0.9);
+          shadowScaleYTo(0.82);
+          shadowOpacityTo(0.78);
+        };
+
+        const handleBookPointerMove = ({ clientX, clientY }) => {
+          if (!bookBounds) {
+            bookBounds = decisionBookVisual.getBoundingClientRect();
+          }
+
+          const normalizedX = Math.max(
+            -0.5,
+            Math.min(0.5, (clientX - bookBounds.left) / bookBounds.width - 0.5),
+          );
+          const normalizedY = Math.max(
+            -0.5,
+            Math.min(0.5, (clientY - bookBounds.top) / bookBounds.height - 0.5),
+          );
+
+          cardRotationXTo(normalizedY * -10);
+          cardRotationYTo(normalizedX * 12);
+          cardXTo(normalizedX * 6);
+          cardYTo(-6 + normalizedY * 2);
+          glareXTo(normalizedX * 70);
+          glareYTo(normalizedY * 52);
+          shadowXTo(normalizedX * -18);
+          shadowYTo(normalizedY * 7);
+          shadowRotationTo(normalizedX * -6);
+          shadowScaleXTo(0.9 + Math.abs(normalizedX) * 0.12);
+          shadowScaleYTo(0.82 + Math.abs(normalizedY) * 0.08);
+        };
+
+        const handleBookPointerLeave = () => {
+          bookBounds = undefined;
+          resetBook();
+        };
+
+        decisionBookVisual.addEventListener('pointerenter', handleBookPointerEnter);
+        decisionBookVisual.addEventListener('pointermove', handleBookPointerMove);
+        decisionBookVisual.addEventListener('pointerleave', handleBookPointerLeave);
+        decisionBookVisual.addEventListener('pointercancel', handleBookPointerLeave);
+
+        return () => {
+          decisionBookVisual.removeEventListener('pointerenter', handleBookPointerEnter);
+          decisionBookVisual.removeEventListener('pointermove', handleBookPointerMove);
+          decisionBookVisual.removeEventListener('pointerleave', handleBookPointerLeave);
+          decisionBookVisual.removeEventListener('pointercancel', handleBookPointerLeave);
+          gsap.killTweensOf([
+            decisionBookCard,
+            decisionBookGlare,
+            decisionBookGlareSheen,
+            decisionBookShadow,
+          ]);
+          gsap.set(
+            [decisionBookCard, decisionBookGlare, decisionBookGlareSheen, decisionBookShadow],
+            { clearProps: 'all' },
+          );
+        };
+      },
+    );
+
+    window.addEventListener('pagehide', () => decisionBookHoverMotion.revert(), {
+      once: true,
+    });
+  }
+
+</script>

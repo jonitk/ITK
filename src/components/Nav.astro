@@ -1,0 +1,10 @@
+---
+interface Props {
+  /** True on the homepage, where the bar starts transparent over the hero. */
+  overHero?: boolean;
+}
+
+const { overHero = false } = Astro.props;
+---
+
+<div data-animation="default" class:list={['navbar-new', { 'is-away-from-hero': !overHero }, 'w-nav']} data-easing2="ease" data-easing="ease" data-collapse="medium" role="banner" data-duration="400"><div class="nav-bg-main"></div><div class="container nav-container-new"><div class="brand-new"><a aria-label="Link To The Homepage" href="/" class="brand-new-inner w-inline-block"><img src="/assets/itk-logo.svg" alt="" class="contain-image nav-brand-logo" width="160" height="20" /></a></div><nav role="navigation" class="navigation-new w-nav-menu"><div class="nav-inner"><a href="/deep-reads/" class="nav-link-new w-inline-block"><div>Deep Reads</div><div class="nav-link-underline"></div></a><div class="nav-cta-button-holder"><a class="arrow-button w-inline-block" href="/contact-us/" btn-size="small" btn-mode="transparent" id="w-node-_1d35417c-523c-0c80-3382-8e7e2a4a3028-2a4a3028"><div>Book a call</div></a></div></div></nav><div class="menu-button-new w-nav-button"><div class="burger-wrapper"><div style="-webkit-transform:translate3d(0, 0rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);-moz-transform:translate3d(0, 0rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);-ms-transform:translate3d(0, 0rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);transform:translate3d(0, 0rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0)" class="burger-line _1"></div><div class="burger-line _2"></div><div style="-webkit-transform:translate3d(0, 0rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);-moz-transform:translate3d(0, 0rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);-ms-transform:translate3d(0, 0rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0);transform:translate3d(0, 0rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0deg) skew(0, 0)" class="burger-line _3"></div></div></div></div></div>

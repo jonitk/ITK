@@ -6,8 +6,6 @@
 
 [build.environment]
   NODE_VERSION = "22"
-  SITE_URL = "https://www.inthekitchen.is"
-  BASE_PATH = "/"
 
 # Always serve the www version of the site.
 [[redirects]]

@@ -1,0 +1,149 @@
+---
+// Global styles carried over from the Webflow site (button modes, fluid type
+// scale, marquee keyframes). Kept inline so they load exactly as before.
+---
+
+<div class="hide w-embed"><style is:inline>
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spining-logo {
+  animation: spin 1.5s linear infinite;
+}
+
+
+
+@keyframes slideLeft {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.testimonials-cms {
+  animation: slideLeft 25s linear infinite;
+}
+
+/* Pause animation on all elements when any one is hovered */
+.testimonials-holder:hover .testimonials-cms {
+  animation-play-state: paused;
+}
+
+
+@media (min-width: 481px) {
+  @keyframes slideLeft2 {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  .footer-scroll-list {
+    animation: slideLeft2 25s linear infinite;
+  }
+
+  /* Pause animation on all elements when any one is hovered */
+  .footer-scroll-holder:hover .footer-scroll-list {
+    animation-play-state: paused;
+  }
+}
+
+
+
+
+</style></div>
+<div class="hide w-embed"><style is:inline>
+/* Global arrow button transition */
+.arrow-button {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Icon/SVG follows text color */
+.arrow-button svg,
+.arrow-button .swiper-arrow {
+  color: currentColor;
+  transition: color 0.3s ease;
+}
+
+/* Blue mode */
+.arrow-button[btn-mode="blue"] {
+  background-color: var(--blue);
+  border-color: var(--blue);
+  color: #ffffff;
+}
+
+/* Transparent mode */
+.arrow-button[btn-mode="transparent"] {
+  background-color: transparent;
+  border-color: #1A1A1A;
+  color: #1A1A1A;
+}
+
+/* Small size */
+.arrow-button[btn-size="small"] {
+  font-size: 0.875rem;
+  line-height: 1em;
+  height: auto;
+}
+
+/* Desktop hover only */
+@media screen and (min-width: 992px) {
+  .arrow-button[btn-mode="blue"]:hover {
+    background-color: #ffffff;
+    border-color: var(--blue);
+    color: var(--blue);
+  }
+
+  .arrow-button[btn-mode="transparent"]:hover {
+    background-color: #1A1A1A;
+    border-color: #1A1A1A;
+    color: #ffffff;
+  }
+}
+</style>
+
+
+<style is:inline>
+  @media screen and (min-width: 2900px) {
+    html {
+      font-size: calc(0.625rem + 0.41666666666666663vw);
+    }
+    .container {
+      max-width: 2300px;
+    }
+  }
+  @media screen and (max-width: 2899px) {
+    html {
+      font-size: calc(0.625rem + 0.41666666666666674vw);
+    }
+  }
+  @media screen and (max-width: 1920px) {
+    html {
+      font-size: calc(0.8126951092611863rem + 0.20811654526534862vw);
+    }
+  }
+  @media screen and (max-width: 1440px) {
+    html {
+      font-size: calc(0.5872384937238494rem + 0.41841004184100417vw);
+    }
+  }
+  @media screen and (max-width: 991px) {
+    html {
+      font-size: 16px;
+    }
+  }
+  :root {
+    --links-ease: ease;
+    --links-duration: 0.25s;
+  }
+</style></div>
