@@ -1,15 +1,16 @@
 name: Build check
 
 # Netlify hosts the site. This workflow only confirms every push builds,
-# and keeps a copy of the built site for comparing changes.
+# and saves the built site to a `builds/<branch>` branch so changes can be
+# compared page by page.
 
 on:
   push:
-    branches: ['**']
+    branches-ignore: ['builds/**']
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -33,9 +34,14 @@ jobs:
           SITE_URL: https://www.inthekitchen.is
           BASE_PATH: /
 
-      - name: Keep the built site
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist
-          retention-days: 14
+      - name: Save the built site to a branch
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          cd dist
+          git init -q -b main
+          git config user.name "build-check"
+          git config user.email "build-check@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Build of ${BRANCH} at ${GITHUB_SHA::7}"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/builds/${BRANCH}"
