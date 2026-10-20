@@ -4,13 +4,21 @@ import Nav from '../components/Nav.astro';
 import Faq from '../components/Faq.astro';
 import Footer from '../components/Footer.astro';
 import SiteScripts from '../components/SiteScripts.astro';
+import { breadcrumbs } from '../lib/site';
 import '../styles/contact.css';
+
+const schema = [
+  { '@type': 'ContactPage', url: Astro.url.href, name: 'Contact In The Kitchen' },
+  breadcrumbs([['Home', '/'], ['Contact', '/contact-us/']]),
+];
 ---
 
 <BaseLayout
   title="Contact us | In The Kitchen"
   description="Contact In The Kitchen to discuss positioning for your B2B technology company."
   bodyClass="body-new contact-page"
+  image="/og/contact.png"
+  schema={schema}
 >
   <div class="page-wrapper">
     <Nav />

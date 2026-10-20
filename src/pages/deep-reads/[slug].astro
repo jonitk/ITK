@@ -6,6 +6,7 @@ import Faq from '../../components/Faq.astro';
 import Footer from '../../components/Footer.astro';
 import SiteScripts from '../../components/SiteScripts.astro';
 import '../../styles/site-chrome.css';
+import { absolute, breadcrumbs, refs } from '../../lib/site';
 import '../../styles/deep-read.css';
 
 export async function getStaticPaths() {
@@ -22,9 +23,38 @@ const displayDate = data.date.toLocaleDateString('en-US', {
   year: 'numeric',
   timeZone: 'UTC',
 });
+
+const url = absolute(`/deep-reads/${article.id}/`);
+const image = `/og/${article.id}.png`;
+const schema = [
+  {
+    '@type': 'BlogPosting',
+    '@id': `${url}#article`,
+    headline: data.title,
+    description: data.description,
+    abstract: data.bottomLine,
+    url,
+    mainEntityOfPage: url,
+    image: absolute(image),
+    datePublished: data.date.toISOString().slice(0, 10),
+    author: refs.person,
+    publisher: refs.organization,
+    isPartOf: { '@id': absolute('/deep-reads/#blog') },
+    inLanguage: 'en-US',
+  },
+  breadcrumbs([['Home', '/'], ['Deep Reads', '/deep-reads/'], [data.title, `/deep-reads/${article.id}/`]]),
+];
 ---
 
-<BaseLayout title={`${data.title} | In The Kitchen`} description={data.description} bodyClass="body-new deep-read-page">
+<BaseLayout
+  title={`${data.title} | In The Kitchen`}
+  description={data.description}
+  bodyClass="body-new deep-read-page"
+  type="article"
+  image={image}
+  published={data.date}
+  schema={schema}
+>
   <div class="page-wrapper">
     <Nav />
     <main class="deep-read-main">
