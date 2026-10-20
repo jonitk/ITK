@@ -1,287 +1,74 @@
 ---
-import SiteChrome from '../../components/SiteChrome.astro';
-import articles from '../../content/deep-reads.generated.json';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Faq from '../../components/Faq.astro';
+import Footer from '../../components/Footer.astro';
+import SiteScripts from '../../components/SiteScripts.astro';
+import '../../styles/site-chrome.css';
+import '../../styles/deep-read.css';
 
-export function getStaticPaths() {
-  return articles.map((article) => ({ params: { slug: article.slug }, props: { article } }));
+export async function getStaticPaths() {
+  const articles = await getCollection('deep-reads');
+  return articles.map((article) => ({ params: { slug: article.id }, props: { article } }));
 }
 
 const { article } = Astro.props;
-const base = import.meta.env.BASE_URL.endsWith('/')
-  ? import.meta.env.BASE_URL
-  : `${import.meta.env.BASE_URL}/`;
-const bodyHtml = article.bodyHtml.replaceAll('__BASE__', base);
+const { data } = article;
+const { Content } = await render(article);
+const displayDate = data.date.toLocaleDateString('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={article.description} />
-    <title>{article.title} | In The Kitchen</title>
-    <link rel="stylesheet" href={`${base}styles/webflow.css`} />
-    <link rel="icon" href={`${base}assets/favicon-small.png`} />
-  </head>
-  <body class="body-new deep-read-page">
-    <SiteChrome>
-      <main class="deep-read-main">
-        <header class="deep-read-hero">
-          <div class="deep-read-hero-inner">
-            <a class="deep-read-back" href={`${base}deep-reads/`}>Deep Reads</a>
-            <h1>{article.title}</h1>
-            <p class="deep-read-dek">{article.dek}</p>
-            <div class="deep-read-meta">
-              <div class="deep-read-author">
-                <img src={`${base}assets/jon-itkin-byline.png`} alt="" width="48" height="48" />
-                <span>Jon Itkin<br /><small>Founder, In The Kitchen</small></span>
-              </div>
-              <div class="deep-read-details">
-                <span>{article.date}</span>
-                <span>{article.readTime}</span>
-              </div>
+<BaseLayout title={`${data.title} | In The Kitchen`} description={data.description} bodyClass="body-new deep-read-page">
+  <div class="page-wrapper">
+    <Nav />
+    <main class="deep-read-main">
+      <header class="deep-read-hero">
+        <div class="deep-read-hero-inner">
+          <a class="deep-read-back" href="/deep-reads/">Deep Reads</a>
+          <h1>{data.title}</h1>
+          <p class="deep-read-dek">{data.dek}</p>
+          <div class="deep-read-meta">
+            <div class="deep-read-author">
+              <img src="/assets/jon-itkin-byline.png" alt="" width="48" height="48" />
+              <span>Jon Itkin<br /><small>Founder, In The Kitchen</small></span>
+            </div>
+            <div class="deep-read-details">
+              <span>{displayDate}</span>
+              <span>{data.readTime}</span>
             </div>
           </div>
-        </header>
+        </div>
+      </header>
 
-        {article.bottomLine && (
-          <section class="deep-read-bottom-line" aria-label="The bottom line">
-            <div>
-              <h2>The bottom line</h2>
-              <p>{article.bottomLine}</p>
-            </div>
-          </section>
-        )}
-
-        <article class="deep-read-article">
-          <div class="deep-read-body" set:html={bodyHtml} />
-        </article>
-
-        <section class="deep-read-more">
-          <a href={`${base}deep-reads/`}>
-            <span>Keep reading</span>
-            <strong>More Deep Reads →</strong>
-          </a>
+      {data.bottomLine && (
+        <section class="deep-read-bottom-line" aria-label="The bottom line">
+          <div>
+            <h2>The bottom line</h2>
+            <p>{data.bottomLine}</p>
+          </div>
         </section>
-      </main>
-    </SiteChrome>
-  </body>
-</html>
+      )}
 
-<style is:global>
-  .deep-read-page {
-    background: #fdfcfa;
-    color: #1a1a1a;
-  }
+      <article class="deep-read-article">
+        <div class="deep-read-body"><Content /></div>
+      </article>
 
-  .deep-read-main {
-    padding-top: clamp(7rem, 10vw, 10rem);
-  }
+      <section class="deep-read-more">
+        <a href="/deep-reads/">
+          <span>Keep reading</span>
+          <strong>More Deep Reads →</strong>
+        </a>
+      </section>
+    </main>
+    <Faq />
+    <Footer />
+  </div>
 
-  .deep-read-hero {
-    padding: clamp(5rem, 9vw, 9rem) clamp(1.5rem, 5vw, 5rem) clamp(4rem, 7vw, 7rem);
-  }
-
-  .deep-read-hero-inner {
-    max-width: 72rem;
-    margin: 0 auto;
-  }
-
-  .deep-read-back {
-    display: inline-flex;
-    margin-bottom: clamp(3rem, 6vw, 6rem);
-    color: inherit;
-    font: 600 0.8rem/1 Dmsans, Arial, sans-serif;
-    letter-spacing: 0.09em;
-    text-decoration: none;
-    text-transform: uppercase;
-  }
-
-  .deep-read-hero h1 {
-    max-width: 14ch;
-    margin: 0;
-    font-family: Fraunces, Georgia, serif;
-    font-size: clamp(4rem, 8vw, 8.75rem);
-    font-weight: 300;
-    line-height: 0.92;
-    letter-spacing: -0.02em;
-    font-synthesis: none;
-  }
-
-  .deep-read-dek {
-    max-width: 48rem;
-    margin: clamp(2rem, 4vw, 4rem) 0 0;
-    color: rgba(26, 26, 26, 0.68);
-    font: 300 clamp(1.2rem, 1.8vw, 1.65rem)/1.48 Dmsans, Arial, sans-serif;
-    letter-spacing: 0;
-  }
-
-  .deep-read-meta {
-    display: flex;
-    margin-top: clamp(3.5rem, 7vw, 7rem);
-    padding-top: 1.5rem;
-    border-top: 1px solid rgba(26, 26, 26, 0.16);
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-    font-family: Dmsans, Arial, sans-serif;
-  }
-
-  .deep-read-author {
-    display: flex;
-    align-items: center;
-    gap: 0.9rem;
-    font-size: 0.95rem;
-    line-height: 1.25;
-  }
-
-  .deep-read-author img {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-
-  .deep-read-author small { color: rgba(26, 26, 26, 0.58); font-size: 0.8rem; }
-  .deep-read-details { display: flex; gap: 2rem; font-size: 0.9rem; }
-
-  .deep-read-bottom-line {
-    padding: 0 clamp(1rem, 3vw, 3rem) clamp(6rem, 10vw, 10rem);
-  }
-
-  .deep-read-bottom-line > div {
-    max-width: 76rem;
-    margin: 0 auto;
-    padding: clamp(2.5rem, 6vw, 6rem);
-    border-radius: 0.9rem;
-    background: #fff27d;
-  }
-
-  .deep-read-bottom-line h2 {
-    margin: 0 0 1.75rem;
-    font: 600 0.8rem/1 Dmsans, Arial, sans-serif;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .deep-read-bottom-line p {
-    max-width: 34ch;
-    margin: 0;
-    font-family: Fraunces, Georgia, serif;
-    font-size: clamp(1.625rem, 2.65vw, 2.625rem);
-    font-weight: 300;
-    line-height: 1.06;
-    letter-spacing: -0.035em;
-  }
-
-  .deep-read-article {
-    padding: 0 1.5rem clamp(7rem, 12vw, 12rem);
-  }
-
-  .deep-read-body {
-    max-width: 48rem;
-    margin: 0 auto;
-    font-family: Dmsans, Arial, sans-serif;
-    font-size: clamp(1.08rem, 1.25vw, 1.2rem);
-    font-weight: 300;
-    line-height: 1.72;
-    letter-spacing: 0;
-  }
-
-  .deep-read-body p,
-  .deep-read-body li {
-    font: inherit;
-    line-height: inherit;
-    letter-spacing: inherit;
-  }
-
-  .deep-read-body p { margin: 0 0 1.55em; }
-  .deep-read-body ul,
-  .deep-read-body ol { margin: 0 0 2em; padding-left: 1.45em; }
-  .deep-read-body li + li { margin-top: 0.6em; }
-
-  .deep-read-body h1,
-  .deep-read-body h2,
-  .deep-read-body h3,
-  .deep-read-body h4 {
-    margin: 2.2em 0 0.7em;
-    font-family: Fraunces, Georgia, serif;
-    font-weight: 300;
-    line-height: 1.02;
-    letter-spacing: -0.035em;
-    font-synthesis: none;
-  }
-
-  .deep-read-body h1 { font-size: clamp(2.75rem, 5vw, 5rem); }
-  .deep-read-body h2 { font-size: clamp(2.4rem, 4vw, 4rem); }
-  .deep-read-body h3 { font-size: clamp(2rem, 3vw, 3rem); }
-  .deep-read-body h4 { font-size: clamp(1.65rem, 2.3vw, 2.25rem); }
-
-  .deep-read-body .quote-block {
-    width: min(60rem, calc(100vw - 3rem));
-    margin: clamp(4rem, 8vw, 8rem) 50%;
-    padding: clamp(2.5rem, 5vw, 5rem);
-    border-radius: 0.75rem;
-    background: #1a1a1a;
-    color: #fff;
-    font-family: Fraunces, Georgia, serif;
-    font-size: clamp(1.125rem, 1.5vw, 1.625rem);
-    font-weight: 300;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
-    transform: translateX(-50%);
-  }
-
-  .deep-read-body figure {
-    width: 100%;
-    max-width: 100%;
-    margin: clamp(3rem, 7vw, 7rem) auto;
-    transform: none;
-  }
-
-  .deep-read-body figure > div {
-    display: block;
-    width: 100%;
-  }
-
-  .deep-read-body figure img {
-    display: block;
-    width: 100%;
-    height: auto;
-    margin-inline: auto;
-    border-radius: 0.75rem;
-  }
-
-  .deep-read-body a { color: inherit; text-underline-offset: 0.18em; }
-
-  .deep-read-more {
-    padding: 0 1.5rem clamp(7rem, 12vw, 12rem);
-  }
-
-  .deep-read-more a {
-    display: flex;
-    max-width: 48rem;
-    margin: 0 auto;
-    padding: 2rem 0;
-    border-top: 1px solid rgba(26, 26, 26, 0.18);
-    border-bottom: 1px solid rgba(26, 26, 26, 0.18);
-    color: inherit;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    text-decoration: none;
-  }
-
-  .deep-read-more span { font: 400 0.9rem/1 Dmsans, Arial, sans-serif; }
-  .deep-read-more strong { font: 500 1.1rem/1 Dmsans, Arial, sans-serif; }
-
-  @media (max-width: 767px) {
-    .deep-read-main { padding-top: 5rem; }
-    .deep-read-hero { padding-top: 5rem; }
-    .deep-read-hero h1 { font-size: clamp(3.35rem, 16vw, 5.5rem); }
-    .deep-read-meta { align-items: flex-start; flex-direction: column; }
-    .deep-read-details { width: 100%; justify-content: space-between; }
-    .deep-read-bottom-line p { font-size: 1.75rem; }
-    .deep-read-body .quote-block { font-size: 1.125rem; }
-  }
-</style>
+  <SiteScripts />
+</BaseLayout>

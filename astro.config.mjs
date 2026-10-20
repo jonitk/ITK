@@ -1,15 +1,21 @@
 import { defineConfig } from 'astro/config';
+import { rehypeDeepReadBlocks } from './src/lib/rehype-deep-read-blocks.mjs';
 
 export default defineConfig({
-  site: process.env.SITE_URL || 'https://example.github.io',
-  base: process.env.BASE_PATH || '/',
+  site: 'https://www.inthekitchen.is',
   output: 'static',
   build: {
     format: 'directory',
   },
+  markdown: {
+    // Articles are written with typographic punctuation already; don't let
+    // the Markdown renderer rewrite quotes or turn bare URLs into links.
+    smartypants: false,
+    gfm: false,
+    rehypePlugins: [rehypeDeepReadBlocks],
+  },
   server: {
     host: '0.0.0.0',
     port: 4321,
-    allowedHosts: ['localhost', '127.0.0.1', 'terminal.local'],
   },
 });

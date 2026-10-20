@@ -1,0 +1,29 @@
+---
+import GlobalEmbeds from '../components/GlobalEmbeds.astro';
+import '../styles/directional-navigation.css';
+
+interface Props {
+  title: string;
+  description: string;
+  bodyClass: string;
+}
+
+const { title, description, bodyClass } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="stylesheet" href="/styles/webflow.css" />
+    <link rel="icon" href="/assets/favicon-small.png" />
+    <slot name="head" />
+  </head>
+  <body class={bodyClass}>
+    <GlobalEmbeds />
+    <slot />
+  </body>
+</html>

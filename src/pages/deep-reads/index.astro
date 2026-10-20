@@ -1,222 +1,63 @@
 ---
-import SiteChrome from '../../components/SiteChrome.astro';
-import articles from '../../content/deep-reads.generated.json';
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Faq from '../../components/Faq.astro';
+import Footer from '../../components/Footer.astro';
+import SiteScripts from '../../components/SiteScripts.astro';
+import '../../styles/site-chrome.css';
+import '../../styles/deep-reads-index.css';
 
-const base = import.meta.env.BASE_URL.endsWith('/')
-  ? import.meta.env.BASE_URL
-  : `${import.meta.env.BASE_URL}/`;
-const assetUrl = (value) => value.replaceAll('__BASE__', base);
+const articles = (await getCollection('deep-reads')).sort((a, b) => a.data.order - b.data.order);
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="Deep Reads from In The Kitchen: detailed thinking about positioning, category leadership, and the decisions that make companies win."
-    />
-    <title>Deep Reads | In The Kitchen</title>
-    <link rel="stylesheet" href={`${base}styles/webflow.css`} />
-    <link rel="icon" href={`${base}assets/favicon-small.png`} />
-  </head>
-  <body class="body-new deep-reads-index-page">
-    <SiteChrome>
-      <main class="deep-reads-index-main">
-        <header class="deep-reads-index-hero">
-          <div class="deep-reads-index-hero-inner">
-            <h1>Go a little deeper.<br />If you dare.</h1>
-            <p>
-              Deep Reads is where I share what I see while I work alongside founders and CEOs as
-              they make the hardest calls of their careers.
-            </p>
+<BaseLayout
+  title="Deep Reads | In The Kitchen"
+  description="Deep Reads from In The Kitchen: detailed thinking about positioning, category leadership, and the decisions that make companies win."
+  bodyClass="body-new deep-reads-index-page"
+>
+  <div class="page-wrapper">
+    <Nav />
+    <main class="deep-reads-index-main">
+      <header class="deep-reads-index-hero">
+        <div class="deep-reads-index-hero-inner">
+          <h1>Go a little deeper.<br />If you dare.</h1>
+          <p>
+            Deep Reads is where I share what I see while I work alongside founders and CEOs as
+            they make the hardest calls of their careers.
+          </p>
+        </div>
+      </header>
+
+      <section class="deep-reads-index-list" aria-labelledby="deep-reads-latest-heading">
+        <div class="deep-reads-index-list-inner">
+          <h2 id="deep-reads-latest-heading">The latest</h2>
+          <div class="deep-reads-card-grid">
+            {articles.map((article, index) => (
+              <article class="deep-reads-card">
+                <a href={`/deep-reads/${article.id}/`} aria-label={`Read ${article.data.title}`}>
+                  <div class="deep-reads-card-media">
+                    <img
+                      src={article.data.thumbnail}
+                      alt=""
+                      loading={index < 2 ? 'eager' : 'lazy'}
+                    />
+                  </div>
+                  <div class="deep-reads-card-copy">
+                    <h3>{article.data.title}</h3>
+                    <p>{article.data.description}</p>
+                    <span class="deep-reads-card-link">Read More</span>
+                  </div>
+                </a>
+              </article>
+            ))}
           </div>
-        </header>
+        </div>
+      </section>
+    </main>
+    <Faq />
+    <Footer />
+  </div>
 
-        <section class="deep-reads-index-list" aria-labelledby="deep-reads-latest-heading">
-          <div class="deep-reads-index-list-inner">
-            <h2 id="deep-reads-latest-heading">The latest</h2>
-            <div class="deep-reads-card-grid">
-              {articles.map((article, index) => (
-                <article class="deep-reads-card">
-                  <a href={`${base}deep-reads/${article.slug}/`} aria-label={`Read ${article.title}`}>
-                    <div class="deep-reads-card-media">
-                      <img
-                        src={assetUrl(article.thumbnail)}
-                        alt=""
-                        loading={index < 2 ? 'eager' : 'lazy'}
-                      />
-                    </div>
-                    <div class="deep-reads-card-copy">
-                      <h3>{article.title}</h3>
-                      <p>{article.description}</p>
-                      <span class="deep-reads-card-link">Read More</span>
-                    </div>
-                  </a>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-      </main>
-    </SiteChrome>
-  </body>
-</html>
-
-<style is:global>
-  .deep-reads-index-page {
-    background: #fdfcfa;
-    color: #1a1a1a;
-  }
-
-  .deep-reads-index-main {
-    padding-top: clamp(6rem, 8vw, 8rem);
-  }
-
-  .deep-reads-index-hero {
-    margin: 0 clamp(1rem, 2vw, 2rem);
-    border-radius: 1rem;
-    background: #afa4e0;
-  }
-
-  .deep-reads-index-hero-inner {
-    display: flex;
-    min-height: clamp(24rem, 38vw, 31rem);
-    max-width: 90rem;
-    margin: 0 auto;
-    padding: clamp(4rem, 6vw, 6rem) clamp(1.5rem, 7vw, 7rem);
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-  }
-
-  .deep-reads-index-hero h1 {
-    max-width: 12ch;
-    margin: 0;
-    font-family: Fraunces, Georgia, serif;
-    font-size: clamp(3.5rem, 5.4vw, 6rem);
-    font-weight: 300;
-    line-height: 0.92;
-    letter-spacing: -0.02em;
-    font-synthesis: none;
-  }
-
-  .deep-reads-index-hero-inner > p:last-child {
-    max-width: 38rem;
-    margin: 1.75rem 0 0;
-    font: 300 clamp(1rem, 1.2vw, 1.25rem)/1.45 Dmsans, Arial, sans-serif;
-    letter-spacing: 0;
-  }
-
-  .deep-reads-index-list {
-    padding: clamp(4rem, 6vw, 6rem) clamp(1rem, 3vw, 3rem);
-    background: #fdfcfa;
-  }
-
-  .deep-reads-index-list-inner {
-    max-width: 88rem;
-    margin: 0 auto;
-  }
-
-  .deep-reads-index-list h2 {
-    margin: 0 0 clamp(2.5rem, 3.5vw, 3.5rem);
-    font-family: Fraunces, Georgia, serif;
-    font-size: clamp(2.5rem, 3.5vw, 4rem);
-    font-weight: 300;
-    line-height: 0.95;
-    letter-spacing: -0.04em;
-  }
-
-  .deep-reads-card-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    column-gap: clamp(1.5rem, 2.5vw, 2.5rem);
-    row-gap: clamp(5rem, 8vw, 8rem);
-  }
-
-  .deep-reads-card {
-    min-width: 0;
-  }
-
-  .deep-reads-card a {
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .deep-reads-card-media {
-    overflow: visible;
-  }
-
-  .deep-reads-card-media img {
-    display: block;
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .deep-reads-card-copy {
-    display: flex;
-    min-height: 18rem;
-    padding: clamp(1.75rem, 2.4vw, 2.5rem) 0 0;
-    flex: 1;
-    flex-direction: column;
-  }
-
-  .deep-reads-card h3 {
-    margin: 0;
-    font-family: Fraunces, Georgia, serif;
-    font-size: clamp(2rem, 2.65vw, 2.65rem);
-    font-weight: 300;
-    line-height: 1.02;
-    letter-spacing: -0.02em;
-    font-synthesis: none;
-  }
-
-  .deep-reads-card p {
-    margin: 1.5rem 0 2rem;
-    font: 300 1rem/1.5 Dmsans, Arial, sans-serif;
-    letter-spacing: 0;
-  }
-
-  .deep-reads-card-link {
-    align-self: flex-start;
-    margin-top: auto;
-    font: 600 1rem/1.2 Dmsans, Arial, sans-serif;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.22em;
-  }
-
-  .deep-reads-card a:hover .deep-reads-card-media img,
-  .deep-reads-card a:focus-visible .deep-reads-card-media img {
-    transform: translateY(-0.35rem) scale(1.01);
-  }
-
-  .deep-reads-card a:focus-visible {
-    outline: 2px solid currentColor;
-    outline-offset: 0.5rem;
-  }
-
-  @media (max-width: 991px) {
-    .deep-reads-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  }
-
-  @media (max-width: 767px) {
-    .deep-reads-index-main { padding-top: 5rem; }
-    .deep-reads-index-hero-inner { min-height: 0; padding-top: 4.5rem; padding-bottom: 4rem; }
-    .deep-reads-index-hero h1 { font-size: clamp(2.75rem, 13vw, 4.25rem); }
-    .deep-reads-index-hero-inner > p:last-child { margin-top: 1.5rem; }
-    .deep-reads-index-list { padding-top: 4rem; padding-bottom: 4rem; }
-    .deep-reads-card-grid { grid-template-columns: 1fr; }
-    .deep-reads-card-copy { min-height: 0; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .deep-reads-card-media img { transition: none; }
-  }
-</style>
+  <SiteScripts />
+</BaseLayout>
